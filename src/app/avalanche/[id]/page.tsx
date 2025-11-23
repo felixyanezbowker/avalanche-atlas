@@ -34,11 +34,11 @@ export default async function AvalancheDetailPage({
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navigation />
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <AvalancheDetail avalanche={avalanche} />
-        <div className="mt-8 bg-white rounded-lg shadow-md p-6">
+        <div className="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
           <CommentSection avalancheId={params.id} initialComments={commentsWithNames} />
         </div>
       </main>

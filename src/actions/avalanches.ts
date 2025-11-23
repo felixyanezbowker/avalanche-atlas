@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 import { eq, desc } from "drizzle-orm";
 
 export async function createAvalanche(formData: FormData) {
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   
   // Get current user
   const {
@@ -128,7 +128,7 @@ export async function getAvalancheById(id: string) {
 }
 
 export async function updateAvalanche(id: string, formData: FormData) {
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   
   const {
     data: { user },

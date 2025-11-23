@@ -19,29 +19,61 @@ const AuthContext = createContext<AuthContextType>({
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const supabase = createSupabaseClient();
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    let mounted = true;
+    let subscription: { unsubscribe: () => void } | null = null;
+    
+    try {
+      const supabase = createSupabaseClient();
 
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+      // Get initial session
+      supabase.auth.getSession().then(({ data: { session }, error }) => {
+        if (!mounted) return;
+        if (error) {
+          console.error("Error getting session:", error);
+          setLoading(false);
+          return;
+        }
+        setUser(session?.user ?? null);
+        setLoading(false);
+      }).catch((error) => {
+        if (!mounted) return;
+        console.error("Error in getSession:", error);
+        setLoading(false);
+      });
 
-    return () => subscription.unsubscribe();
-  }, [supabase.auth]);
+      // Listen for auth changes
+      const authStateChange = supabase.auth.onAuthStateChange((_event, session) => {
+        if (!mounted) return;
+        setUser(session?.user ?? null);
+        setLoading(false);
+      });
+      
+      subscription = authStateChange.data.subscription;
+
+      return () => {
+        mounted = false;
+        subscription?.unsubscribe();
+      };
+    } catch (error) {
+      console.error("Error initializing Supabase client:", error);
+      setLoading(false);
+      return () => {
+        mounted = false;
+        subscription?.unsubscribe();
+      };
+    }
+  }, []);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
+    try {
+      const supabase = createSupabaseClient();
+      await supabase.auth.signOut();
+      setUser(null);
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
   };
 
   return (

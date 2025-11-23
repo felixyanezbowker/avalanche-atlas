@@ -70,7 +70,7 @@ export default function AvalancheDetail({ avalanche }: AvalancheDetailProps) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
       {avalanche.photoUrl && (
         <div className="relative w-full h-96">
           <Image
@@ -84,10 +84,10 @@ export default function AvalancheDetail({ avalanche }: AvalancheDetailProps) {
       <div className="p-6">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
               {avalanche.locationName || avalanche.region}
             </h1>
-            <p className="text-gray-600">Reported: {formatDate(avalanche.reportedAt)}</p>
+            <p className="text-gray-700 dark:text-gray-300">Reported: {formatDate(avalanche.reportedAt)}</p>
           </div>
           {canEdit && (
             <Link
@@ -101,40 +101,40 @@ export default function AvalancheDetail({ avalanche }: AvalancheDetailProps) {
 
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div>
-            <span className="text-sm font-medium text-gray-500">Region</span>
-            <p className="text-lg">{avalanche.region}</p>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Region</span>
+            <p className="text-lg text-gray-900 dark:text-gray-100">{avalanche.region}</p>
           </div>
           <div>
-            <span className="text-sm font-medium text-gray-500">Slope Aspect</span>
-            <p className="text-lg">{avalanche.slopeAspect}</p>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Slope Aspect</span>
+            <p className="text-lg text-gray-900 dark:text-gray-100">{avalanche.slopeAspect}</p>
           </div>
           {avalanche.elevationM && (
             <div>
-              <span className="text-sm font-medium text-gray-500">Elevation</span>
-              <p className="text-lg">{avalanche.elevationM}m</p>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Elevation</span>
+              <p className="text-lg text-gray-900 dark:text-gray-100">{avalanche.elevationM}m</p>
             </div>
           )}
           <div>
-            <span className="text-sm font-medium text-gray-500">Avalanche Size</span>
-            <p className="text-lg">
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Avalanche Size</span>
+            <p className="text-lg text-gray-900 dark:text-gray-100">
               {avalanche.avalancheSize}/5
               {avalanche.avalancheSizeLabel && ` - ${avalanche.avalancheSizeLabel}`}
             </p>
           </div>
           <div>
-            <span className="text-sm font-medium text-gray-500">Trigger Type</span>
-            <p className="text-lg capitalize">{avalanche.triggerType}</p>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Trigger Type</span>
+            <p className="text-lg capitalize text-gray-900 dark:text-gray-100">{avalanche.triggerType}</p>
           </div>
         </div>
 
         {avalanche.additionalComments && (
           <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-2">Additional Comments</h2>
-            <p className="text-gray-700 whitespace-pre-wrap">{avalanche.additionalComments}</p>
+            <h2 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Additional Comments</h2>
+            <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap">{avalanche.additionalComments}</p>
           </div>
         )}
 
-        <div className="flex flex-wrap gap-4 pt-4 border-t">
+        <div className="flex flex-wrap gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
           {avalanche.mapUrl && (
             <a
               href={avalanche.mapUrl}

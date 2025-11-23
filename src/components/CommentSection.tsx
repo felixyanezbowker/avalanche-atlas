@@ -68,7 +68,7 @@ export default function CommentSection({ avalancheId, initialComments }: Comment
 
   return (
     <div className="mt-8">
-      <h2 className="text-2xl font-semibold mb-4">Comments</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Comments</h2>
 
       <div className="mb-4">
         <input
@@ -76,7 +76,7 @@ export default function CommentSection({ avalancheId, initialComments }: Comment
           placeholder="Search comments..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500 dark:placeholder-gray-400"
         />
       </div>
 
@@ -87,7 +87,7 @@ export default function CommentSection({ avalancheId, initialComments }: Comment
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="Add a comment..."
             rows={3}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500 dark:placeholder-gray-400"
           />
           <button
             type="submit"
@@ -98,8 +98,8 @@ export default function CommentSection({ avalancheId, initialComments }: Comment
           </button>
         </form>
       ) : (
-        <p className="mb-4 text-gray-600">
-          <a href={`/login?redirect=/avalanche/${avalancheId}`} className="text-blue-600 hover:underline">
+        <p className="mb-4 text-gray-700 dark:text-gray-300">
+          <a href={`/login?redirect=/avalanche/${avalancheId}`} className="text-blue-600 dark:text-blue-400 hover:underline">
             Sign in
           </a>{" "}
           to post a comment
@@ -108,19 +108,19 @@ export default function CommentSection({ avalancheId, initialComments }: Comment
 
       <div className="space-y-4">
         {filteredComments.length === 0 ? (
-          <p className="text-gray-500">No comments yet.</p>
+          <p className="text-gray-700 dark:text-gray-300">No comments yet.</p>
         ) : (
           filteredComments.map((comment) => (
-            <div key={comment.id} className="bg-gray-50 rounded-md p-4">
+            <div key={comment.id} className="bg-gray-50 dark:bg-gray-700 rounded-md p-4">
               <div className="flex justify-between items-start mb-2">
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                   {comment.userName || "Anonymous"}
                 </span>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-700 dark:text-gray-300">
                   {new Date(comment.createdAt).toLocaleString()}
                 </span>
               </div>
-              <p className="text-gray-800">{comment.body}</p>
+              <p className="text-gray-900 dark:text-gray-100">{comment.body}</p>
             </div>
           ))
         )}

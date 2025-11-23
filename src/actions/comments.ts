@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 import { eq, desc } from "drizzle-orm";
 
 export async function createComment(avalancheId: string, body: string) {
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   
   const {
     data: { user },

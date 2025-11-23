@@ -15,6 +15,14 @@ export default function LoginPage() {
   const searchParams = useSearchParams();
   const supabase = createSupabaseClient();
 
+  // Check for error from OAuth callback
+  useEffect(() => {
+    const errorParam = searchParams.get("error");
+    if (errorParam) {
+      setError(decodeURIComponent(errorParam));
+    }
+  }, [searchParams]);
+
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -22,29 +30,66 @@ export default function LoginPage() {
 
     try {
       if (isSignUp) {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
             data: {
               name: name || email.split("@")[0],
             },
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
           },
         });
-        if (error) throw error;
-        alert("Check your email to confirm your account!");
+        
+        if (error) {
+          throw error;
+        }
+        
+        // Check if email confirmation is required
+        if (data.user && !data.session) {
+          setError(
+            "Account created! Please check your email to confirm your account before signing in. " +
+            "If you don't see the email, check your spam folder."
+          );
+          // Clear form after successful signup
+          setEmail("");
+          setPassword("");
+          setName("");
+        } else if (data.session) {
+          // User is automatically signed in (email confirmation disabled)
+          const redirect = searchParams.get("redirect") || "/";
+          router.push(redirect);
+          router.refresh();
+        } else {
+          setError("Sign up failed. Please try again.");
+        }
       } else {
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
-        if (error) throw error;
+        
+        if (error) {
+          // Provide more helpful error messages
+          if (error.message.includes("Invalid login credentials")) {
+            throw new Error("Invalid email or password. Please try again.");
+          } else if (error.message.includes("Email not confirmed")) {
+            throw new Error("Please check your email and confirm your account before signing in.");
+          }
+          throw error;
+        }
+        
+        if (!data.session) {
+          throw new Error("Sign in failed. Please try again.");
+        }
+        
         const redirect = searchParams.get("redirect") || "/";
         router.push(redirect);
         router.refresh();
       }
     } catch (err: any) {
-      setError(err.message);
+      console.error("Email sign-in error:", err);
+      setError(err.message || "An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -55,24 +100,50 @@ export default function LoginPage() {
     setError(null);
     try {
       const redirectTo = searchParams.get("redirect") || "/";
-      const { error } = await supabase.auth.signInWithOAuth({
+      const callbackUrl = `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(redirectTo)}`;
+      
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(redirectTo)}`,
+          redirectTo: callbackUrl,
         },
       });
-      if (error) throw error;
+      
+      if (error) {
+        console.error("OAuth error:", error);
+        if (error.message.includes("not configured") || error.message.includes("disabled")) {
+          throw new Error(
+            "Google OAuth is not configured. Please configure it in your Supabase Dashboard: " +
+            "Authentication → Providers → Google"
+          );
+        }
+        throw error;
+      }
+      
+      // If OAuth redirects, the loading state will be handled by the redirect
+      // If there's no redirect URL, it means OAuth isn't configured
+      if (!data?.url) {
+        throw new Error(
+          "Google OAuth is not configured. Please check your Supabase Dashboard: " +
+          "Authentication → Providers → Google. Make sure to enable the provider and add " +
+          "your Google OAuth credentials."
+        );
+      }
+      
+      // Redirect to Google OAuth page
+      window.location.href = data.url;
     } catch (err: any) {
-      setError(err.message);
+      console.error("Google sign-in error:", err);
+      setError(err.message || "Failed to sign in with Google. Please try again.");
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-2xl font-bold text-center mb-6">Avalanche Atlas</h1>
-        <h2 className="text-xl font-semibold text-center mb-6">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
+      <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
+        <h1 className="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-gray-100">Avalanche Atlas</h1>
+        <h2 className="text-xl font-semibold text-center mb-6 text-gray-900 dark:text-gray-100">
           {isSignUp ? "Create Account" : "Sign In"}
         </h2>
 
@@ -85,24 +156,24 @@ export default function LoginPage() {
         <button
           onClick={handleGoogleSignIn}
           disabled={loading}
-          className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+          className="w-full mb-4 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50"
         >
           {loading ? "Loading..." : "Sign in with Gmail"}
         </button>
 
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300"></div>
+            <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">Or</span>
+            <span className="px-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300">Or</span>
           </div>
         </div>
 
         <form onSubmit={handleEmailSignIn} className="space-y-4">
           {isSignUp && (
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-900 dark:text-gray-100">
                 Name (optional)
               </label>
               <input
@@ -110,12 +181,12 @@ export default function LoginPage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 dark:placeholder-gray-400"
               />
             </div>
           )}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-900 dark:text-gray-100">
               Email
             </label>
             <input
@@ -124,11 +195,11 @@ export default function LoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 dark:placeholder-gray-400"
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-900 dark:text-gray-100">
               Password
             </label>
             <input
@@ -137,7 +208,7 @@ export default function LoginPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 dark:placeholder-gray-400"
             />
           </div>
           <button
@@ -151,8 +222,15 @@ export default function LoginPage() {
 
         <div className="mt-4 text-center">
           <button
-            onClick={() => setIsSignUp(!isSignUp)}
-            className="text-sm text-blue-600 hover:text-blue-500"
+            type="button"
+            onClick={() => {
+              setIsSignUp(!isSignUp);
+              setError(null);
+              setEmail("");
+              setPassword("");
+              setName("");
+            }}
+            className="text-sm text-blue-600 hover:text-blue-500 hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1"
           >
             {isSignUp
               ? "Already have an account? Sign in"

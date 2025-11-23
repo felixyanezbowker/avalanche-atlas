@@ -34,7 +34,7 @@ export default function PhotoUpload({ onPhotosChange, existingPhotoUrl }: PhotoU
 
   return (
     <div className="space-y-4">
-      <label className="block text-sm font-medium text-gray-700">
+      <label className="block text-sm font-medium text-gray-900 dark:text-gray-100">
         Photos (optional)
       </label>
       <input

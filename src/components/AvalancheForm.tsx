@@ -128,15 +128,15 @@ export default function AvalancheForm({ onSubmit, initialData, loading }: Avalan
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label htmlFor="region" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="region" className="block text-sm font-medium text-gray-900 dark:text-gray-100">
           Region <span className="text-red-500">*</span>
         </label>
         <select
           id="region"
           value={region}
           onChange={(e) => setRegion(e.target.value)}
-          className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
-            errors.region ? "border-red-500" : "border-gray-300"
+          className={`mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
+            errors.region ? "border-red-500" : "border-gray-300 dark:border-gray-600"
           }`}
         >
           <option value="">Select a region</option>
@@ -150,7 +150,7 @@ export default function AvalancheForm({ onSubmit, initialData, loading }: Avalan
       </div>
 
       <div>
-        <label htmlFor="locationName" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="locationName" className="block text-sm font-medium text-gray-900 dark:text-gray-100">
           Location Name (optional)
         </label>
         <input
@@ -158,21 +158,21 @@ export default function AvalancheForm({ onSubmit, initialData, loading }: Avalan
           type="text"
           value={locationName}
           onChange={(e) => setLocationName(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 dark:placeholder-gray-400"
           placeholder="e.g., Vall del Madriu"
         />
       </div>
 
       <div>
-        <label htmlFor="slopeAspect" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="slopeAspect" className="block text-sm font-medium text-gray-900 dark:text-gray-100">
           Slope Aspect <span className="text-red-500">*</span>
         </label>
         <select
           id="slopeAspect"
           value={slopeAspect}
           onChange={(e) => setSlopeAspect(e.target.value)}
-          className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
-            errors.slopeAspect ? "border-red-500" : "border-gray-300"
+          className={`mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
+            errors.slopeAspect ? "border-red-500" : "border-gray-300 dark:border-gray-600"
           }`}
         >
           <option value="">Select aspect</option>
@@ -188,7 +188,7 @@ export default function AvalancheForm({ onSubmit, initialData, loading }: Avalan
       </div>
 
       <div>
-        <label htmlFor="reportedAt" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="reportedAt" className="block text-sm font-medium text-gray-900 dark:text-gray-100">
           Date & Time <span className="text-red-500">*</span>
         </label>
         <input
@@ -196,15 +196,15 @@ export default function AvalancheForm({ onSubmit, initialData, loading }: Avalan
           type="datetime-local"
           value={reportedAt}
           onChange={(e) => setReportedAt(e.target.value)}
-          className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
-            errors.reportedAt ? "border-red-500" : "border-gray-300"
+          className={`mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
+            errors.reportedAt ? "border-red-500" : "border-gray-300 dark:border-gray-600"
           }`}
         />
         {errors.reportedAt && <p className="mt-1 text-sm text-red-600">{errors.reportedAt}</p>}
       </div>
 
       <div>
-        <label htmlFor="elevationM" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="elevationM" className="block text-sm font-medium text-gray-900 dark:text-gray-100">
           Elevation (meters, optional)
         </label>
         <input
@@ -212,21 +212,21 @@ export default function AvalancheForm({ onSubmit, initialData, loading }: Avalan
           type="number"
           value={elevationM}
           onChange={(e) => setElevationM(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 dark:placeholder-gray-400"
           placeholder="e.g., 2500"
         />
       </div>
 
       <div>
-        <label htmlFor="avalancheSize" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="avalancheSize" className="block text-sm font-medium text-gray-900 dark:text-gray-100">
           Avalanche Size <span className="text-red-500">*</span>
         </label>
         <select
           id="avalancheSize"
           value={avalancheSize}
           onChange={(e) => setAvalancheSize(e.target.value)}
-          className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
-            errors.avalancheSize ? "border-red-500" : "border-gray-300"
+          className={`mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
+            errors.avalancheSize ? "border-red-500" : "border-gray-300 dark:border-gray-600"
           }`}
         >
           <option value="">Select size</option>
@@ -242,15 +242,15 @@ export default function AvalancheForm({ onSubmit, initialData, loading }: Avalan
       </div>
 
       <div>
-        <label htmlFor="triggerType" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="triggerType" className="block text-sm font-medium text-gray-900 dark:text-gray-100">
           Cause/Trigger Type <span className="text-red-500">*</span>
         </label>
         <select
           id="triggerType"
           value={triggerType}
           onChange={(e) => setTriggerType(e.target.value)}
-          className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
-            errors.triggerType ? "border-red-500" : "border-gray-300"
+          className={`mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
+            errors.triggerType ? "border-red-500" : "border-gray-300 dark:border-gray-600"
           }`}
         >
           <option value="">Select trigger type</option>
@@ -264,7 +264,7 @@ export default function AvalancheForm({ onSubmit, initialData, loading }: Avalan
       </div>
 
       <div>
-        <label htmlFor="mapUrl" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="mapUrl" className="block text-sm font-medium text-gray-900 dark:text-gray-100">
           Map Link (optional)
         </label>
         <input
@@ -272,7 +272,7 @@ export default function AvalancheForm({ onSubmit, initialData, loading }: Avalan
           type="url"
           value={mapUrl}
           onChange={(e) => setMapUrl(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 dark:placeholder-gray-400"
           placeholder="https://mapy.com/..."
         />
       </div>
@@ -283,7 +283,7 @@ export default function AvalancheForm({ onSubmit, initialData, loading }: Avalan
       />
 
       <div>
-        <label htmlFor="additionalComments" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="additionalComments" className="block text-sm font-medium text-gray-900 dark:text-gray-100">
           Additional Comments (optional)
         </label>
         <textarea
@@ -291,7 +291,7 @@ export default function AvalancheForm({ onSubmit, initialData, loading }: Avalan
           rows={4}
           value={additionalComments}
           onChange={(e) => setAdditionalComments(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 dark:placeholder-gray-400"
           placeholder="Any additional details about the avalanche..."
         />
       </div>

@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import EditForm from "./EditForm";
 
 export default async function EditPage({ params }: { params: { id: string } }) {
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
