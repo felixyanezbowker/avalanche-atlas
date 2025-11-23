@@ -1,6 +1,6 @@
 # Avalanche Atlas
 
-Avalanche Atlas is an avalanche reporting app for winter adventurers. Around 100,000 avalanches happen each year and 99% go unreported. Users log slides with key details and photos, then check a shared dashboard before touring to make better, safer decisions.
+Avalanche Atlas is an avalanche reporting app. Around 100,000 avalanches happen each year and 99% go unreported. Users log avalanches with key details and photos, it gets uploaded to a shared dashbpoard; and then people can refer to it before touring to make better, safer decisions.
 
 ## Features
 
