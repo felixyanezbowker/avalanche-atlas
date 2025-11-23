@@ -1,0 +1,21 @@
+import Link from "next/link";
+import Navigation from "@/components/Navigation";
+
+export default function NotFound() {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Navigation />
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
+        <p className="text-xl text-gray-600 mb-8">Avalanche report not found</p>
+        <Link
+          href="/"
+          className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+        >
+          Back to Home
+        </Link>
+      </div>
+    </div>
+  );
+}
+
